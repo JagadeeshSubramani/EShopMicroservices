@@ -6,6 +6,14 @@ namespace Catalog.API.Products.DeleteProduct
 
     public record DeleteProductResult(bool IsSuccess);
 
+    public class DeleteProductCommandValidator : AbstractValidator<DeleteProductCommand>
+    {
+        public DeleteProductCommandValidator()
+        {
+            RuleFor(c => c.Id).NotEmpty().WithMessage("Product ID is required.");
+        }
+    }
+
     internal class DeleteProductCommandHandler(IDocumentSession session, ILogger<DeleteProductCommandHandler> logger)
         : ICommandHandler<DeleteProductCommand, DeleteProductResult>
     {
@@ -17,7 +25,7 @@ namespace Catalog.API.Products.DeleteProduct
 
             if (product is null)
             {
-                throw new ProductNotFoundException();
+                throw new ProductNotFoundException(command.Id);
             }
 
             session.Delete<Product>(command.Id);
