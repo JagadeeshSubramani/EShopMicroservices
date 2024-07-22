@@ -11,13 +11,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Products\GetProducts\**" />
-    <Content Remove="Products\GetProducts\**" />
-    <EmbeddedResource Remove="Products\GetProducts\**" />
-    <None Remove="Products\GetProducts\**" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Marten" Version="7.24.0" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.20.1" />
   </ItemGroup>
