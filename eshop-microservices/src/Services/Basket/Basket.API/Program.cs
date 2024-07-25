@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Caching.Distributed;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -21,6 +22,21 @@ builder.Services.AddMarten(opts =>
 }).UseLightweightSessions();
 
 builder.Services.AddScoped<IBasketRepository, BasketRepository>();
+//Decorator pattern setting
+/*
+builder.Services.AddScoped<IBasketRepository>(provider =>
+{
+    var basketRepository = provider.GetService<IBasketRepository>();
+    return new CachedBasketRepository(basketRepository!, provider.GetService<IDistributedCache>()!);
+});
+*/
+//Instead use Scrutor library
+builder.Services.Decorate<IBasketRepository, CachedBasketRepository>();
+builder.Services.AddStackExchangeRedisCache(options =>
+{
+    options.Configuration = builder.Configuration.GetConnectionString("Redis");
+    //options.InstanceName="Basket";
+});
 
 builder.Services.AddExceptionHandler<CustomExceptionHandler>();
 
